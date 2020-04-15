@@ -19,31 +19,61 @@ export class App extends Component {
   };
 
   handleChange = (e) => {
-    console.log("changing");
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
   };
   handleSubmit = (e) => {
-    console.log("submited");
+    e.preventDefault();
+    const newItem = {
+      id: this.state.id,
+      title: this.state.item,
+    };
+    const updatedItems = [...this.state.items, newItem];
+    this.setState(
+      {
+        items: updatedItems,
+        item: "",
+        editItem: false,
+        id: uuid(),
+      },
+      () => console.log(this.state)
+    );
   };
   handleEdit = (id) => {
-    console.log(id);
+    // const filterdItems = this.state.items.filter((item) => item.id !== id);
+    const editingItem = this.state.items.find((item) => item.id === id);
+
+    this.setState({
+      // items: filterdItems,
+      item: editingItem.title,
+      id: id,
+      editItem: true,
+    });
   };
   handleDelet = (id) => {
-    console.log(id);
+    this.setState({
+      items: this.state.items.filter((item) => item.id !== id),
+    });
   };
   clearList = () => {
-    console.log("cleared");
+    this.setState({
+      items: [],
+      item: "",
+    });
   };
 
   render() {
-    console.log(this.state);
-
     const { items, item, editItem } = this.state;
+
     return (
       <Fragment>
         <div className="container">
           <div className="row">
             <div className="col-10 mx-auto col-md-8 mt-5">
-              <h2 className="text-captalized text-center">Todo Rct</h2>
+              <h2 className="text-captalized text-center text-success">
+                Todo Rct
+              </h2>
               <TodoInput
                 item={item}
                 handleChange={this.handleChange}
